@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Comments\CommentsController;
 use App\Http\Controllers\Api\ChangePassword\PasswordController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\FastApiController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -42,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments', [CommentsController::class, 'store']);
     Route::get('/comments/{id}', [CommentsController::class, 'show'])->middleware('admin');
     Route::delete('/comments/{id}', [CommentsController::class, 'destroy'])->middleware('admin');
+
+    //Send image and receive result
     Route::post('/send-image', [FastApiController::class, 'sendImage']);
 
 });
