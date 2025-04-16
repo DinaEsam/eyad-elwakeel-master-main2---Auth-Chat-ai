@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
+
 
 class AuthController extends Controller
 {
@@ -75,10 +77,12 @@ class AuthController extends Controller
 
 public function register(Request $request)
 {
-    $validatedData = $request->validate([
+    $data = $request->all(); // دي بتجمع البيانات من البودي والـ query مع بعض
+
+    $validator = Validator::make($data, [
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed', // زيادة الحد الأدنى إلى 8 أحرف
+        'password' => 'required|string|min:8|confirmed',
         'national_id' => 'nullable|string|unique:users',
         'phone' => 'nullable|string|unique:users',
         'weight' => 'nullable|numeric|min:0',
@@ -90,6 +94,15 @@ public function register(Request $request)
         'latitude' => 'nullable|numeric|between:-90,90',
         'longitude' => 'nullable|numeric|between:-180,180',
     ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'Validation error',
+            'errors' => $validator->errors(),
+        ], 422);
+    }
+
+    $validatedData = $validator->validated();
 
     try {
         $user = User::create([
