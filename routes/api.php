@@ -42,9 +42,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments', [CommentsController::class, 'store']);
     Route::get('/comments/{id}', [CommentsController::class, 'show'])->middleware('admin');
     Route::delete('/comments/{id}', [CommentsController::class, 'destroy'])->middleware('admin');
+    Route::post('/send-image', [FastApiController::class, 'sendImage']);
 
 });
-    Route::post('/send-image', [FastApiController::class, 'sendImage']);
 
 //email
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetCode']);
