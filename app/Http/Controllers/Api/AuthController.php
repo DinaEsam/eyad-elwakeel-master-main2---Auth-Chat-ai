@@ -97,7 +97,7 @@ public function register(Request $request)
 
     if ($validator->fails()) {
         return response()->json([
-            'message' => 'Validation error',
+            'message' => 'Registration failed',
             'errors' => $validator->errors(),
         ], 422);
     }
