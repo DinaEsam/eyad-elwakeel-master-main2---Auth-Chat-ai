@@ -140,29 +140,34 @@ public function register(Request $request)
 
       // تسجيل الدخول
       public function login(Request $request)
-      {
-          $request->validate([
-              'email' => 'required|email',
-              'password' => 'required',
-          ]);
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-          $user = User::where('email', $request->email)->first();
+    $user = User::where('email', $request->email)->first();
 
-          if (!$user || !Hash::check($request->password, $user->password)) {
-              throw ValidationException::withMessages([
-                  'email' => ['The provided credentials are incorrect.'],
-              ])->status(401);
-          }
+    if (!$user) {
+        throw ValidationException::withMessages([
+            'email' => ['The provided email does not exist in our records.'],
+        ])->status(401);
+    }
 
-          $token = $user->createToken('auth_token')->plainTextToken;
+    if (!Hash::check($request->password, $user->password)) {
+        throw ValidationException::withMessages([
+            'password' => ['The provided password is incorrect.'],
+        ])->status(401);
+    }
 
-          return response()->json([
-              'message' => 'User Logged-in successfully',
-              'user' => $user,
-              'token' => $token,
-              'role' => $user->role,
-          ], 201);
-      }
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'User logged in successfully',
+        'token' => $token,
+        'user' => $user
+    ], 200);
+}
 
 
     // تسجيل الخروج
