@@ -11,7 +11,7 @@ class FastApiService
 
     public function __construct()
     {
-        $this->fastApiUrl = 'https://graduationproject-production-00a5.up.railway.app/upload-image/';
+        $this->fastApiUrl = 'https://graduationproject-production-25a9.up.railway.app/upload-image/';
     }
 
     public function sendImage($image)
