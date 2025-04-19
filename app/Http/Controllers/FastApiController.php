@@ -45,7 +45,7 @@ class FastApiController extends Controller
        // إرسال الصورة لـ FastAPI
        $aiResponse = $this->fastApiService->sendImage($image);
    
-       $user = Auth::check();
+       $user = Auth::user();
        if (!$user) {
            return response()->json(['error' => 'You must log in first'], 403);
        }
