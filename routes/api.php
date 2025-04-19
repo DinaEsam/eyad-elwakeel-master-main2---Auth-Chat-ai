@@ -46,8 +46,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Send image and receive result
 
-});
     Route::post('/send-image', [FastApiController::class, 'sendImage']);
+});
 
 //email
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetCode']);
