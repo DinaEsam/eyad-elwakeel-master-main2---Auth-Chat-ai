@@ -46,9 +46,9 @@ class FastApiController extends Controller
        $aiResponse = $this->fastApiService->sendImage($image);
    
        $user = Auth::user();
-       if (!$user) {
-           return response()->json(['error' => 'You must log in first'], 403);
-       }
+       if (!Auth::check()) {
+        return response()->json(['error' => 'You must log in first'], 403);
+        }
    
        User::where('id', $user->id)->update([
            'profile_image' => $uploadedFileUrl,
