@@ -177,23 +177,12 @@ public function login(Request $request)
 
     $user = User::where('email', $request->email)->first();
 
-    if (!$user) {
-        throw ValidationException::withMessages([
-            'email' => ['The provided email does not exist in our records.'],
-        ])->status(401);
-    }
-
-    if (!Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'password' => ['The provided password is incorrect.'],
-        ])->status(401);
     if (!$user || !Hash::check($request->password, $user->password))
     {
         return response()->json([
             'message' => 'Invalid email or password.',
         ], 401);
     }
-
     $token = $user->createToken('auth_token')->plainTextToken;
 
     return response()->json([
@@ -205,9 +194,9 @@ public function login(Request $request)
             'role' => $user->role,
         ],
         'token' => $token,
-        'user' => $user
     ], 200);
 }
+
 
 
     // تسجيل الخروج
