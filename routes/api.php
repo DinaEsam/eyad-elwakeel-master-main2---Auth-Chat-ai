@@ -53,3 +53,7 @@ Route::middleware('auth:sanctum')->post('/send-image', [FastApiController::class
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetCode']);
 Route::post('/verify-reset-code', [ResetPasswordController::class, 'verifyResetCode']);
 Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword']);
+
+// Check unique Fields
+Route::post('/check-unique-fields', [AuthController::class, 'checkUniqueFields']);
+

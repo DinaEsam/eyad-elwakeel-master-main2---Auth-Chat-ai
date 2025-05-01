@@ -138,6 +138,36 @@ public function register(Request $request)
     }
 }
 
+// Check Unique Fields
+public function checkUniqueFields(Request $request)
+{
+    $request->validate([
+        'national_id' => 'nullable|string',
+        'email'       => 'nullable|email',
+        'phone'       => 'nullable|string',
+    ]);
+
+    $response = [];
+
+    if ($request->has('national_id')) {
+        $exists = User::where('national_id', $request->national_id)->exists();
+        $response['national_id'] = $exists ? 'The national ID already exists.' : 'The national ID is available.';
+    }
+
+    if ($request->has('email')) {
+        $exists = User::where('email', $request->email)->exists();
+        $response['email'] = $exists ? 'The email already exists.' : 'The email is available.';
+    }
+
+    if ($request->has('phone')) {
+        $exists = User::where('phone', $request->phone)->exists();
+        $response['phone'] = $exists ? 'The phone number already exists.' : 'The phone number is available.';
+    }
+
+    return response()->json($response);
+}
+
+
       // تسجيل الدخول
 //      public function login(Request $request)
 // {
@@ -168,6 +198,7 @@ public function register(Request $request)
 //         'user' => $user
 //     ], 200);
 // }
+
 public function login(Request $request)
 {
     $request->validate([
