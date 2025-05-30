@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'role' => 'doctor',
             'national_id' => '123456789',
-            'phone' => '0123456789',
+            'phone' => '01296024733',
         ]);
 
         User::create([
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'role' => 'doctor',
             'national_id' => '987654321',
-            'phone' => '0987654321',
+            'phone' => '01587432147',
         ]);
         User::create([
             'name' => 'د/أحمد صالح ',
@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'role' => 'doctor',
             'national_id' => '36954321',
-            'phone' => '0987654321',
+            'phone' => '01198732177',
         ]);
         User::create([
             'name' => 'د/يوسف طه ',
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'role' => 'doctor',
             'national_id' => '145354321',
-            'phone' => '0987654321',
+            'phone' => '01298732125',
         ]);
 
         // Create 2 admins
@@ -52,7 +52,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'role' => 'admin',
             'national_id' => '111222333',
-            'phone' => '01234526789',
+            'phone' => '01011588455',
         ]);
 
         User::create([
@@ -61,7 +61,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'role' => 'admin',
             'national_id' => '444555666',
-            'phone' => '0987654387',
+            'phone' => '0129854387',
         ]);
 
         //create 8 patiant
