@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
         // Create 4 doctors
         User::create([
             'name' => 'د/مجدي ذكي ',
-            'email' => 'magdy_zaki@doctor.com',
+            'email' => 'magdy_zaki@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'doctor',
             'national_id' => '123456789',
@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'د/راشد زكريا ',
-            'email' => 'rashed_zakria@doctor.com',
+            'email' => 'rashed_zakria@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'doctor',
             'national_id' => '987654321',
@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
         ]);
         User::create([
             'name' => 'د/أحمد صالح ',
-            'email' => 'ahmed_saleh@doctor.com',
+            'email' => 'ahmed_saleh@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'doctor',
             'national_id' => '36954321',
@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
         ]);
         User::create([
             'name' => 'د/يوسف طه ',
-            'email' => 'yousef_taha@doctor.com',
+            'email' => 'yousef_taha@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'doctor',
             'national_id' => '145354321',
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
         // Create 2 admins
         User::create([
             'name' => 'eyad elwakeel',
-            'email' => 'eyad_elwakeel@admin.com',
+            'email' => 'eyad_elwakeel@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'admin',
             'national_id' => '111222333',
@@ -57,7 +57,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'dina essam',
-            'email' => 'dina_essam@admin.com',
+            'email' => 'dina_essam@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'admin',
             'national_id' => '444555666',
@@ -67,56 +67,56 @@ class UserSeeder extends Seeder
         //create 8 patiant
         User::create([
             'name' => 'Ahmed Hassan',
-            'email' => 'ahmed.hassan@example.com',
+            'email' => 'ahmed.hassan@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'patient',
         ]);
 
         User::create([
             'name' => 'Mona Adel',
-            'email' => 'mona.adel@example.com',
+            'email' => 'mona.adel@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'patient',
         ]);
 
         User::create([
             'name' => 'Youssef Tarek',
-            'email' => 'youssef.tarek@example.com',
+            'email' => 'youssef.tarek@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'patient',
         ]);
 
         User::create([
             'name' => 'Nourhan Ahmed',
-            'email' => 'nourhan.ahmed@example.com',
+            'email' => 'nourhan.ahmed@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'patient',
         ]);
 
         User::create([
             'name' => 'Salma Mahmoud',
-            'email' => 'salma.mahmoud@example.com',
+            'email' => 'salma.mahmoud@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'patient',
         ]);
 
         User::create([
             'name' => 'Karim Nabil',
-            'email' => 'karim.nabil@example.com',
+            'email' => 'karim.nabil@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'patient',
         ]);
 
         User::create([
             'name' => 'Aya Mostafa',
-            'email' => 'aya.mostafa@example.com',
+            'email' => 'aya.mostafa@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'patient',
         ]);
 
         User::create([
             'name' => 'Omar Samir',
-            'email' => 'omar.samir@example.com',
+            'email' => 'omar.samir@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'patient',
         ]);
