@@ -40,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //api related Complaints and suggestions
     Route::get('/comments', [CommentsController::class, 'index'])->middleware('admin');
-    Route::post('/comments', [CommentsController::class, 'store']);
+    // Route::post('/comments', [CommentsController::class, 'store']);
     Route::get('/comments/{id}', [CommentsController::class, 'show'])->middleware('admin');
     Route::delete('/comments/{id}', [CommentsController::class, 'destroy'])->middleware('admin');
 
@@ -57,3 +57,5 @@ Route::post('/reset-password', [ResetPasswordController::class, 'resetPassword']
 // Check unique Fields
 Route::post('/check-unique-fields', [AuthController::class, 'checkUniqueFields']);
 
+//Anyone can leave a comment
+Route::post('/comments', [CommentsController::class, 'store']);
