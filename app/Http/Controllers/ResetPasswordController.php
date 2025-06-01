@@ -38,7 +38,6 @@ class ResetPasswordController extends Controller
 
         DB::table('password_resets')->updateOrInsert(
             ['email' => $request->email],
-            ['token' => $code, 'created_at' => now()]
         );
 
         Mail::to($request->email)->send(new OtpMail($code));
@@ -53,12 +52,10 @@ class ResetPasswordController extends Controller
     {
         $request->validate([
             'email' => 'required|email|exists:users,email',
-            'token' => 'required'
         ]);
 
         $passwordReset = DB::table('password_resets')
             ->where('email', $request->email)
-            ->where('token', $request->token)
             ->first();
 
         if (!$passwordReset || now()->diffInMinutes($passwordReset->created_at) > 30) {
@@ -78,13 +75,11 @@ class ResetPasswordController extends Controller
     {
         $request->validate([
             'email' => 'required|email|exists:users,email',
-            'token' => 'required',
             'password' => 'required|confirmed|min:8'
         ]);
 
         $passwordReset = DB::table('password_resets')
             ->where('email', $request->email)
-            ->where('token', $request->token)
             ->first();
 
         if (!$passwordReset || now()->diffInMinutes($passwordReset->created_at) > 30) {
