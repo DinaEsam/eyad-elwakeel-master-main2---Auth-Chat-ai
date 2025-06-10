@@ -26,22 +26,21 @@ class ResetPasswordController extends Controller
                 'message' => 'Invalid email format.',
             ], 400);
         }
-
         if (!User::where('email', $request->email)->exists()) {
             return response()->json([
                 'status' => false,
                 'message' => 'Email not found.',
             ], 404);
         }
-
         $code = random_int(100000, 999999);
-
         DB::table('password_resets')->updateOrInsert(
             ['email' => $request->email],
+            [
+                'token' => $code, // أو استخدم Hash::make($code) لو عايز تأمين أقوى
+                'created_at' => now(),
+            ]
         );
-
         Mail::to($request->email)->send(new OtpMail($code));
-
         return response()->json([
             'status' => true,
             'message' => 'Reset code sent to your email.',
