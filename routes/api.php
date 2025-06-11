@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\ChangePassword\PasswordController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\FastApiController;
+use App\Http\Controllers\StatsController;
+
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -44,7 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/comments/{id}', [CommentsController::class, 'show'])->middleware('admin');
     Route::delete('/comments/{id}', [CommentsController::class, 'destroy'])->middleware('admin');
 
-    //Send image and receive result
+
+    // Knowing the number of visits and the number of doctors and patients
+    Route::get('/stats', [StatsController::class, 'index'])->middleware('admin');
 
 });
 Route::middleware('auth:sanctum')->post('/send-image', [FastApiController::class, 'sendImage']);
@@ -59,3 +63,6 @@ Route::post('/check-unique-fields', [AuthController::class, 'checkUniqueFields']
 
 //Anyone can leave a comment
 Route::post('/comments', [CommentsController::class, 'store']);
+
+
+

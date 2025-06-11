@@ -44,6 +44,8 @@ class DoctorController extends Controller
         //     'user_id' => $user->id, // Link user with doctor
         // ]);
 
+
+
         return response()->json([
             'message' => 'Doctor added successfully',
             'user' => $user,
