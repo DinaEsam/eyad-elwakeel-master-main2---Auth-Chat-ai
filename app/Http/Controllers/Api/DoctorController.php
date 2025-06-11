@@ -17,6 +17,7 @@ class DoctorController extends Controller
             'password' => 'required|string|min:6',
             'specialty' => 'required|string|max:255',
             'phone' => 'nullable|string|max:15',
+            'national_id'=>'required',
         ]);
 
         // Ensure only admin can create a doctor
@@ -30,6 +31,8 @@ class DoctorController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'doctor', // Assign role
+            'national_id'=>$request->national_id,
+            'phone'=>$request->phone,
         ]);
 
         // Create the doctor record in 'doctors' table
