@@ -48,12 +48,12 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::check()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized'
-            ], 401);
-        }
+        // if (!Auth::check()) {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Unauthorized'
+        //     ], 401);
+        // }
 
         $validator = Validator::make($request->all(), [
             'massage' => 'required|string',
