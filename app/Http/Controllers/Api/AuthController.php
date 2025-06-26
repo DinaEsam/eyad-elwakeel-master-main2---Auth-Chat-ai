@@ -215,16 +215,22 @@ public function login(Request $request)
         ], 401);
     }
     $token = $user->createToken('auth_token')->plainTextToken;
-    
+
+
+    // return response()->json([
+    //     'message' => 'User logged in successfully',
+    //     'user' => [
+    //         'id' => $user->id,
+    //         'name' => $user->name,
+    //         'email' => $user->email,
+    //         'role' => $user->role,
+    //     ],
+    //     'token' => $token,
+    // ], 200);
 
     return response()->json([
         'message' => 'User logged in successfully',
-        'user' => [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role,
-        ],
+        'user' => $user, 
         'token' => $token,
     ], 200);
 }
