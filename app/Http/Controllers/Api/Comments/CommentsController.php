@@ -18,14 +18,14 @@ class CommentsController extends Controller
     {
         //
          // Get the current authenticated user
-    $user_id = User::find(Auth::id());
+    // $user_id = User::find(Auth::id());
 
-    // Check if the user exists
-    if (!$user_id) {
-        return response()->json(['error' => 'User not authenticated'], 401);
+    // // Check if the user exists
+    // if (!$user_id) {
+    //     return response()->json(['error' => 'User not authenticated'], 401);
 
 
-    }
+    // }
 
     $comments = Comment::all();
     return response()->json([
@@ -69,10 +69,10 @@ class CommentsController extends Controller
             ], 422);
         }
 
-        $user_id = Auth::id();
+        // $user_id = Auth::id();
 
         $comment = Comment::create([
-            'user_id' => $user_id,
+            // 'user_id' => $user_id,
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'email' => $request->email,
