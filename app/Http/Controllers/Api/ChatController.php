@@ -1,17 +1,19 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use App\Models\ChatParticipant;
 use App\Models\Message;
+use App\Models\MessageReaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    // Start a new chat between a doctor and a patient
+    // Start chat
     public function startChat(Request $request)
     {
         $request->validate([
@@ -35,44 +37,32 @@ class ChatController extends Controller
 
         return response()->json(['message' => 'Chat started', 'chat_id' => $chat->id]);
     }
-// Search for users by name
-public function searchUsers(Request $request)
+
+    // Send message
+  public function sendMessage(Request $request)
 {
     $request->validate([
-        'search_term' => 'required|string|min:1',
+        'chat_id' => 'required|exists:chats,id',
+        'message' => 'required|string',
+        'reply_to_id' => 'nullable|exists:messages,id', 
     ]);
 
-    $searchTerm = $request->search_term;
+    $chat = Chat::findOrFail($request->chat_id);
 
-    // Query the users table for users whose name matches the search term
-    $users = User::where('name', 'like', '%' . $searchTerm . '%')
-                 ->where('id', '!=', Auth::id()) // Exclude the authenticated user
-                 ->get(['id', 'name']);
-
-    return response()->json(['users' => $users]);
-}
-    // Send a message
-    public function sendMessage(Request $request)
-    {
-        $request->validate([
-            'chat_id' => 'required|exists:chats,id',
-            'message' => 'required|string',
-        ]);
-
-        $chat = Chat::findOrFail($request->chat_id);
-
-        if (!$chat->participants()->where('user_id', Auth::id())->exists()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        $message = Message::create([
-            'chat_id' => $chat->id,
-            'sender_id' => Auth::id(),
-            'message' => $request->message,
-        ]);
-
-        return response()->json(['message' => 'Message sent', 'data' => $message]);
+    if (!$chat->participants()->where('user_id', Auth::id())->exists()) {
+        return response()->json(['message' => 'Unauthorized'], 403);
     }
+
+    $message = Message::create([
+        'chat_id' => $chat->id,
+        'sender_id' => Auth::id(),
+        'message' => $request->message,
+        'reply_to_id' => $request->reply_to_id, 
+    ]);
+
+    return response()->json(['message' => 'Message sent', 'data' => $message]);
+}
+
 
     // Get chat messages
     public function getMessages($chat_id)
@@ -88,112 +78,143 @@ public function searchUsers(Request $request)
         return response()->json(['messages' => $messages]);
     }
 
-    //////// List user chats///////
-
-    // public function listChats(Request $request)
-    // {
-    //     $userId = Auth::id(); // Get the authenticated user's ID
-
-    //     // Fetch the chats for the user along with participants
-    //     $chats = Chat::with('participants.user')->whereHas('participants', function ($query) use ($userId) {
-    //         $query->where('user_id', $userId);
-    //     })->get();
-
-    //     return response()->json([
-    //         'chats' => $chats->map(function ($chat) use ($userId) {
-    //             // Find the receiver's user data
-    //             $receiver = $chat->participants->firstWhere('user_id', '!=', $userId); // Get the other participant
-    //             return [
-    //                 'id' => $chat->id,
-    //                 'receiver' => [
-    //                     'id' => $receiver->user->id,
-    //                     'name' => $receiver->user->name,
-    //                 ],
-    //             ];
-    //         }),
-    //     ]);
-    // }
+    // List all chats for the user
     public function listChats(Request $request)
     {
-        try {
-            $userId = Auth::id(); // الحصول على ID المستخدم الحالي
-    
-            // التحقق من أن المستخدم مسجل الدخول
-            if (!$userId) {
-                return response()->json(['error' => 'Unauthorized user. Please login again.'], 401);
-            }
-    
-            // جلب المحادثات التي يشارك فيها المستخدم مع تحميل بيانات المشاركين
-            $chats = Chat::with('participants.user')->whereHas('participants', function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            })->get();
-    
-            // التحقق إذا لم يكن هناك محادثات
-            if ($chats->isEmpty()) {
-                return response()->json(['message' => 'No chats found.'], 200);
-            }
-    
-            // تنسيق البيانات وإرجاعها
-            return response()->json([
-                'chats' => $chats->map(function ($chat) use ($userId) {
-                    // جلب المرسل والمستقبل
-                    $receiver = $chat->participants->firstWhere('user_id', '!=', $userId);
-                    
-                    // التحقق من أن البيانات موجودة قبل الوصول إليها لتجنب الأخطاء
-                    return [
-                        'id' => $chat->id,
-                        'receiver' => $receiver ? [
-                            'id' => $receiver->user->id ?? null,
-                            'name' => $receiver->user->name ?? 'Unknown',
-                        ] : null,
-                    ];
-                }),
-            ]);
-    
-        } catch (\Exception $e) {
-            // التعامل مع الأخطاء غير المتوقعة وإرجاع رسالة مفصلة
-            return response()->json([
-                'error' => 'Something went wrong.',
-                'message' => $e->getMessage(),
-            ], 500);
+        $userId = Auth::id();
+
+        if (!$userId) {
+            return response()->json(['error' => 'Unauthorized user. Please login again.'], 401);
         }
-    }
-    
 
-    // Edit a message
-public function editMessage(Request $request, $message_id)
-{
-    $request->validate([
-        'message' => 'required|string',
-    ]);
+        $chats = Chat::with('participants.user')->whereHas('participants', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
 
-    $message = Message::findOrFail($message_id);
+        if ($chats->isEmpty()) {
+            return response()->json(['message' => 'No chats found.'], 200);
+        }
 
-    // Check if the authenticated user is the sender of the message
-    if ($message->sender_id !== Auth::id()) {
-        return response()->json(['message' => 'Unauthorized'], 403);
-    }
-
-    // Update the message content
-    $message->message = $request->message;
-    $message->save();
-
-    return response()->json(['message' => 'Message updated', 'data' => $message]);
-}
-
-// Delete a message
-public function deleteMessage($message_id)
-{
-    $message = Message::findOrFail($message_id);
-
-    // Check if the authenticated user is the sender of the message
-    if ($message->sender_id !== Auth::id()) {
-        return response()->json(['message' => 'Unauthorized'], 403);
+        return response()->json([
+            'chats' => $chats->map(function ($chat) use ($userId) {
+                $receiver = $chat->participants->firstWhere('user_id', '!=', $userId);
+                return [
+                    'id' => $chat->id,
+                    'receiver' => $receiver ? [
+                        'id' => $receiver->user->id ?? null,
+                        'name' => $receiver->user->name ?? 'Unknown',
+                    ] : null,
+                ];
+            }),
+        ]);
     }
 
-    // Delete the message
-    $message->delete();
+    // Edit message
+    public function editMessage(Request $request, $message_id)
+    {
+        $request->validate([
+            'message' => 'required|string',
+        ]);
 
-    return response()->json(['message' => 'Message deleted']);
-}
+        $message = Message::findOrFail($message_id);
+
+        if ($message->sender_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $message->message = $request->message;
+        $message->save();
+
+        return response()->json(['message' => 'Message updated', 'data' => $message]);
+    }
+
+    // Delete message
+    public function deleteMessage($message_id)
+    {
+        $message = Message::findOrFail($message_id);
+
+        if ($message->sender_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $message->delete();
+
+        return response()->json(['message' => 'Message deleted']);
+    }
+
+    // React to message
+    public function reactToMessage(Request $request, $message_id)
+    {
+        $request->validate([
+            'reaction' => 'required|string|max:255',
+        ]);
+
+        $message = Message::find($message_id);
+
+        if (!$message) {
+            return response()->json(['status' => false, 'message' => 'Message not found.'], 404);
+        }
+
+        $chat = Chat::find($message->chat_id);
+
+        if (!$chat || !$chat->participants()->where('user_id', Auth::id())->exists()) {
+            return response()->json(['status' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $reaction = MessageReaction::updateOrCreate(
+            ['message_id' => $message_id, 'user_id' => Auth::id()],
+            ['reaction' => $request->reaction]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Reaction saved successfully.',
+            'data' => $reaction
+        ]);
+    }
+
+    // Reply to message
+    public function replyToMessage(Request $request, $message_id)
+    {
+        $request->validate([
+            'message' => 'required|string',
+        ]);
+
+        $originalMessage = Message::find($message_id);
+
+        if (!$originalMessage) {
+            return response()->json(['message' => 'Original message not found.'], 404);
+        }
+
+        $chat = Chat::find($originalMessage->chat_id);
+
+        if (!$chat || !$chat->participants()->where('user_id', Auth::id())->exists()) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
+        $reply = Message::create([
+            'chat_id' => $chat->id,
+            'sender_id' => Auth::id(),
+            'message' => $request->message,
+            'reply_to' => $originalMessage->id, // يجب أن يكون عندك عمود reply_to في جدول messages
+        ]);
+
+        return response()->json(['message' => 'Reply sent successfully.', 'data' => $reply]);
+    }
+
+    // Search users
+    public function searchUsers(Request $request)
+    {
+        $request->validate([
+            'search_term' => 'required|string|min:1',
+        ]);
+
+        $searchTerm = $request->search_term;
+
+        $users = User::where('name', 'like', '%' . $searchTerm . '%')
+                     ->where('id', '!=', Auth::id())
+                     ->get(['id', 'name']);
+
+        return response()->json(['users' => $users]);
+    }
 }
