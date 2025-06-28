@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class WaterReminder extends Model
+{
+   use HasFactory;
+
+    protected $fillable = [
+        'type',
+        'wake_up_time',
+        'sleep_time',
+        'reminder_every',
+    ];}
