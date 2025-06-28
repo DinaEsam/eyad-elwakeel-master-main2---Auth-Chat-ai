@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ChangePassword\PasswordController;
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\FastApiController;
+use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\StatsController;
 
 
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chats', [ChatController::class, 'listChats']); // List chats
     Route::put('/chat/message/{message_id}', [ChatController::class, 'editMessage']); // Edit message
     Route::delete('/chat/message/{message_id}', [ChatController::class, 'deleteMessage']); // Delete message
+    Route::post('/chat/message/{message_id}/react', [ChatController::class, 'reactToMessage']);//react
     Route::get('/search-users', [ChatController::class, 'searchUsers']);
     // api related with doctor
     Route::post('/doctors', [DoctorController::class, 'store'])->middleware('admin');
@@ -52,6 +54,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 Route::middleware('auth:sanctum')->post('/send-image', [FastApiController::class, 'sendImage']);
+Route::post('/medication', [ReminderController::class, 'storeMedication']);
+Route::post('/water', [ReminderController::class, 'storeWater']);
+Route::post('/dialysis', [ReminderController::class, 'storeDialysis']);
 
 //email
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetCode']);
