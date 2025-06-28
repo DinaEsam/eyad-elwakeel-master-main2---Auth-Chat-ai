@@ -39,29 +39,29 @@ class ChatController extends Controller
     }
 
     // Send message
-  public function sendMessage(Request $request)
-{
-    $request->validate([
-        'chat_id' => 'required|exists:chats,id',
-        'message' => 'required|string',
-        'reply_to_id' => 'nullable|exists:messages,id', 
-    ]);
+    public function sendMessage(Request $request)
+    {
+        $request->validate([
+            'chat_id' => 'required|exists:chats,id',
+            'message' => 'required|string',
+            'reply_to_id' => 'nullable|exists:messages,id',
+        ]);
 
-    $chat = Chat::findOrFail($request->chat_id);
+        $chat = Chat::findOrFail($request->chat_id);
 
-    if (!$chat->participants()->where('user_id', Auth::id())->exists()) {
-        return response()->json(['message' => 'Unauthorized'], 403);
+        if (!$chat->participants()->where('user_id', Auth::id())->exists()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $message = Message::create([
+            'chat_id' => $chat->id,
+            'sender_id' => Auth::id(),
+            'message' => $request->message,
+            'reply_to_id' => $request->reply_to_id, 
+        ]);
+
+        return response()->json(['message' => 'Message sent', 'data' => $message]);
     }
-
-    $message = Message::create([
-        'chat_id' => $chat->id,
-        'sender_id' => Auth::id(),
-        'message' => $request->message,
-        'reply_to_id' => $request->reply_to_id, 
-    ]);
-
-    return response()->json(['message' => 'Message sent', 'data' => $message]);
-}
 
 
     // Get chat messages
@@ -196,7 +196,7 @@ class ChatController extends Controller
             'chat_id' => $chat->id,
             'sender_id' => Auth::id(),
             'message' => $request->message,
-            'reply_to' => $originalMessage->id, // يجب أن يكون عندك عمود reply_to في جدول messages
+            'reply_to' => $originalMessage->id,
         ]);
 
         return response()->json(['message' => 'Reply sent successfully.', 'data' => $reply]);
@@ -212,8 +212,8 @@ class ChatController extends Controller
         $searchTerm = $request->search_term;
 
         $users = User::where('name', 'like', '%' . $searchTerm . '%')
-                     ->where('id', '!=', Auth::id())
-                     ->get(['id', 'name']);
+            ->where('id', '!=', Auth::id())
+            ->get(['id', 'name']);
 
         return response()->json(['users' => $users]);
     }
