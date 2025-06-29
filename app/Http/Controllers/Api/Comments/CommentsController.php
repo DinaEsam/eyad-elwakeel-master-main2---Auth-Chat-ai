@@ -3,146 +3,95 @@
 namespace App\Http\Controllers\Api\Comments;
 
 use App\Models\Comment;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CommentsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // عرض جميع التعليقات
     public function index()
     {
-        //
-         // Get the current authenticated user
-    // $user_id = User::find(Auth::id());
-
-    // // Check if the user exists
-    // if (!$user_id) {
-    //     return response()->json(['error' => 'User not authenticated'], 401);
-
-
-    // }
-
-    $comments = Comment::all();
-    return response()->json([
-        'status' => 'success',
-        'data' => $comments,
-    ]);
-}
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-
+        
+        $comments = Comment::all();
+        return response()->json([
+            'status' => 'success',
+            'data' => $comments,
+        ]);
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // إنشاء تعليق جديد
     public function store(Request $request)
     {
-        // if (!Auth::check()) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Unauthorized'
-        //     ], 401);
-        // }
-
         $validator = Validator::make($request->all(), [
-            'massage' => 'required|string',
+            'f_name' => 'required|string|max:255',
+            'l_name' => 'required|string|max:255',
+            'email'  => 'required|email|max:255',
+            'message' => 'required|string',
         ], [
-            'massage.required' => 'The message field is required. Please enter a message.',
+            'f_name.required' => 'الاسم الأول مطلوب',
+            'l_name.required' => 'الاسم الأخير مطلوب',
+            'email.required' => 'البريد الإلكتروني مطلوب',
+            'message.required' => 'حقل الرسالة مطلوب',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Validation failed',
+                'message' => 'فشل التحقق من البيانات',
                 'errors' => $validator->errors()
             ], 422);
         }
 
-        // $user_id = Auth::id();
-
         $comment = Comment::create([
-            // 'user_id' => $user_id,
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
-            'email' => $request->email,
-            'massage' => $request->massage,
+            'email'  => $request->email,
+            'message' => $request->message,
         ]);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Comment created successfully',
+            'message' => 'تم إنشاء التعليق بنجاح',
             'data' => $comment,
         ], 201);
     }
 
-
-    /**
-     * Display the specified resource.
-     */
+    // عرض تعليق محدد
     public function show(string $comment_id)
     {
-        //
-        $comment= Comment::find($comment_id);
-
-    if (!$comment) {
-        return response()->json([
-            'status' => 'error',
-            'massage' => 'Comment not found',
-        ], 404);
-    }
-
-    return response()->json([
-        'status' => 'success',
-        'data' => $comment,
-    ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $comment_id)
-    {
-        //
-        $comment= Comment::find($comment_id);
+        $comment = Comment::find($comment_id);
 
         if (!$comment) {
-            return response()->json(data: [
+            return response()->json([
                 'status' => 'error',
-                'massage' => 'Comment not found',
-            ], status: 404);
+                'message' => 'لم يتم العثور على التعليق',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $comment,
+        ]);
+    }
+
+    // حذف تعليق
+    public function destroy(string $comment_id)
+    {
+        $comment = Comment::find($comment_id);
+
+        if (!$comment) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'التعليق غير موجود',
+            ], 404);
         }
 
         $comment->delete();
+
         return response()->json([
             'status' => 'success',
-            'massage' => 'Comment deleted successfully',
+            'message' => 'تم حذف التعليق بنجاح',
         ]);
-}
+    }
 }
