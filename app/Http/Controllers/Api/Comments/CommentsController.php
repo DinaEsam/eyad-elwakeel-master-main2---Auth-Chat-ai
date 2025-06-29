@@ -23,9 +23,8 @@ class CommentsController extends Controller
     // إنشاء تعليق جديد
     public function store(Request $request)
     {
-            if (!Auth::guard('sanctum')->check()) {
-        return response()->json(['message' => 'يجب تسجيل الدخول أولاً'], 401);
-    }
+          
+    
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
