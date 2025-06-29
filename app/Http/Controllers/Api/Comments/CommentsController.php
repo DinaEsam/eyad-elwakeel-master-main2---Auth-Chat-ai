@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Comments;
 use App\Models\Comment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CommentsController extends Controller
@@ -12,7 +13,6 @@ class CommentsController extends Controller
     // عرض جميع التعليقات
     public function index()
     {
-        
         $comments = Comment::all();
         return response()->json([
             'status' => 'success',
@@ -23,6 +23,9 @@ class CommentsController extends Controller
     // إنشاء تعليق جديد
     public function store(Request $request)
     {
+            if (!Auth::guard('sanctum')->check()) {
+        return response()->json(['message' => 'يجب تسجيل الدخول أولاً'], 401);
+    }
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
