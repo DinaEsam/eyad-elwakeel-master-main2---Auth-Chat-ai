@@ -15,7 +15,7 @@ class Comment extends Model
         'f_name',
         'l_name',
         'email',
-        'massage',
+        'message',
     ];
 
     public function user()
