@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('f_name')->nullable();
             $table->string('l_name')->nullable();
             $table->string('email')->nullable();
@@ -21,11 +22,11 @@ return new class extends Migration
 
             $table->timestamps();
 
-            //foirgn key
-            // $table->foreign('user_id')
-            //     ->references('id')
-            //     ->on('users')
-            //     ->onDelete('cascade');
+            // foirgn key
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
