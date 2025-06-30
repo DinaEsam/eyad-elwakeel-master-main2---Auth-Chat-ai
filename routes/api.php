@@ -60,8 +60,8 @@ Route::post('/water', [ReminderController::class, 'storeWater']);
 Route::post('/dialysis', [ReminderController::class, 'storeDialysis']);
 
 //appointments
-Route::get('/appointments/{doctor_id}', [AppointmentController::class, 'availableAppointments']);
-Route::post('/reserve/{appointment_id}', [AppointmentController::class, 'reserve']);
+    Route::get('/appointments/available/{doctor_id}', [AppointmentController::class, 'availableAppointments']);
+    Route::post('/appointments/reserve/{appointment_id}', [AppointmentController::class, 'reserve']);
 //email
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetCode']);
 Route::post('/verify-reset-code', [ResetPasswordController::class, 'verifyResetCode']);
