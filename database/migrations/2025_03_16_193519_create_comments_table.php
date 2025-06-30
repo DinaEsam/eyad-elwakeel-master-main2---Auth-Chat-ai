@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable()->change();
             $table->string('f_name')->nullable();
             $table->string('l_name')->nullable();
             $table->string('email')->nullable();
