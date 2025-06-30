@@ -11,6 +11,7 @@ class Comment extends Model
 
     protected $fillable = [
 
+        'user_id',
         'f_name',
         'l_name',
         'email',
