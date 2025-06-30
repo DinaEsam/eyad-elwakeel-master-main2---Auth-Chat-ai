@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Comments;
 use App\Models\Comment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CommentsController extends Controller
@@ -23,8 +22,6 @@ class CommentsController extends Controller
     // إنشاء تعليق جديد
     public function store(Request $request)
     {
-          
-    
         $validator = Validator::make($request->all(), [
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
@@ -40,7 +37,7 @@ class CommentsController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'فشل التحقق من البيانات',
+                'massage' => 'فشل التحقق من البيانات',
                 'errors' => $validator->errors()
             ], 422);
         }
@@ -49,7 +46,7 @@ class CommentsController extends Controller
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'email'  => $request->email,
-            'massage' => $request->message,
+            'massage' => $request->massage, // ✅ تم التصحيح هنا
         ]);
 
         return response()->json([
