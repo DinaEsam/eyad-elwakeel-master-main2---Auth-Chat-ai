@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -17,7 +18,8 @@ class DoctorController extends Controller
             'password' => 'required|string|min:6',
             'specialty' => 'required|string|max:255',
             'phone' => 'nullable|string|max:15',
-            'national_id'=>'required',
+            'national_id' => 'required',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // Ensure only admin can create a doctor
@@ -25,14 +27,21 @@ class DoctorController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
+        $imagePath = null;
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/doctors', $imageName);
+            $imagePath = 'doctors/' . $imageName;
+        }
         // Create the doctor user in 'users' table
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'doctor', // Assign role
-            'national_id'=>$request->national_id,
-            'phone'=>$request->phone,
+            'national_id' => $request->national_id,
+            'phone' => $request->phone,
         ]);
 
         // Create the doctor record in 'doctors' table
@@ -53,25 +62,25 @@ class DoctorController extends Controller
         ], 201);
     }
 
-     // To get all Doctors with pagination
-     public function index()
-{
-    // $doctorsFromDoctorTable = Doctor::all();
-    $Doctors = User::where('role', 'doctor')->get();
+    // To get all Doctors with pagination
+    public function index()
+    {
+        // $doctorsFromDoctorTable = Doctor::all();
+        $Doctors = User::where('role', 'doctor')->get();
 
-    // ممكن تعرضهم كقوائم منفصلة
-    return response()->json($Doctors, 200);
-}
-public function destroy(Request $request, $id)
-{
-    $Doctor = User::where('role', 'doctor')->find($id);
-    if (!$Doctor) {
-        return response()->json("Doctor with this id not found", 404);
+        // ممكن تعرضهم كقوائم منفصلة
+        return response()->json($Doctors, 200);
     }
-    $Doctor->delete();
-    return response()->json("Doctor {$id} deleted", 200);
-}
-public function update(Request $request, $id)
+    public function destroy(Request $request, $id)
+    {
+        $Doctor = User::where('role', 'doctor')->find($id);
+        if (!$Doctor) {
+            return response()->json("Doctor with this id not found", 404);
+        }
+        $Doctor->delete();
+        return response()->json("Doctor {$id} deleted", 200);
+    }
+    public function update(Request $request, $id)
     {
         // البحث عن الدكتور حسب الـ ID
         $doctor = User::where('id', $id)->where('role', 'doctor')->firstOrFail();
@@ -100,7 +109,4 @@ public function update(Request $request, $id)
             'doctor' => $doctor
         ], 200);
     }
-
-
-
 }
