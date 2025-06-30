@@ -12,13 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('doctors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('specialty');
-            $table->string('email')->unique();
+             $table->id();
+            $table->unsignedBigInteger('user_id')->unique(); // كل دكتور مرتبط بمستخدم
+            $table->string('specialty')->nullable();
+            $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Link to users
+            $table->decimal('price', 8, 2)->nullable();
+            $table->string('waiting_time')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 
