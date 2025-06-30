@@ -46,7 +46,7 @@ class CommentsController extends Controller
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'email'  => $request->email,
-            'massage' => $request->massage, // ✅ تم التصحيح هنا
+            'massage' => $request->massage, 
         ]);
 
         return response()->json([
