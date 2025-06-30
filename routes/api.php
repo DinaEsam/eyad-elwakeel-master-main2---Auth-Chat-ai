@@ -45,14 +45,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Knowing the number of visits and the number of doctors and patients
     Route::get('/stats', [StatsController::class, 'index'])->middleware('admin');
+    //api related Complaints and suggestions
+    Route::get('/comments', [CommentsController::class, 'index'])->middleware('admin');
+    Route::get('/comments/{id}', [CommentsController::class, 'show'])->middleware('admin');
+    Route::delete('/comments/{id}', [CommentsController::class, 'destroy'])->middleware('admin');
 });
 #ai
 Route::middleware('auth:sanctum')->post('/send-image', [FastApiController::class, 'sendImage']);
 //api related Complaints and suggestions
-Route::get('/comments', [CommentsController::class, 'index'])->middleware('admin');
 Route::post('/comments', [CommentsController::class, 'store']);
-Route::get('/comments/{id}', [CommentsController::class, 'show'])->middleware('admin');
-Route::delete('/comments/{id}', [CommentsController::class, 'destroy'])->middleware('admin');
 // Notifications
 Route::post('/medication', [ReminderController::class, 'storeMedication']);
 Route::post('/water', [ReminderController::class, 'storeWater']);
