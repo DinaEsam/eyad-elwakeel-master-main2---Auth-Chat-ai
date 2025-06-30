@@ -29,12 +29,12 @@ class CommentsController extends Controller
             'f_name' => 'required|string|max:255',
             'l_name' => 'required|string|max:255',
             'email'  => 'required|email|max:255',
-            'message' => 'required|string',
+            'massage' => 'required|string',
         ], [
             'f_name.required' => 'الاسم الأول مطلوب',
             'l_name.required' => 'الاسم الأخير مطلوب',
             'email.required' => 'البريد الإلكتروني مطلوب',
-            'message.required' => 'حقل الرسالة مطلوب',
+            'massage.required' => 'حقل الرسالة مطلوب',
         ]);
 
         if ($validator->fails()) {
@@ -49,12 +49,12 @@ class CommentsController extends Controller
             'f_name' => $request->f_name,
             'l_name' => $request->l_name,
             'email'  => $request->email,
-            'message' => $request->message,
+            'massage' => $request->message,
         ]);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'تم إنشاء التعليق بنجاح',
+            'massage' => 'تم إنشاء التعليق بنجاح',
             'data' => $comment,
         ], 201);
     }
@@ -67,7 +67,7 @@ class CommentsController extends Controller
         if (!$comment) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'لم يتم العثور على التعليق',
+                'massage' => 'لم يتم العثور على التعليق',
             ], 404);
         }
 
@@ -85,7 +85,7 @@ class CommentsController extends Controller
         if (!$comment) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'التعليق غير موجود',
+                'massage' => 'التعليق غير موجود',
             ], 404);
         }
 
@@ -93,7 +93,7 @@ class CommentsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'تم حذف التعليق بنجاح',
+            'massage' => 'تم حذف التعليق بنجاح',
         ]);
     }
 }
