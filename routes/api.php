@@ -55,6 +55,7 @@ Route::post('/send-image', [FastApiController::class, 'sendImage']);
 //api related Complaints and suggestions
 Route::post('/comments', [CommentsController::class, 'store']);
 // Notifications
+Route::get('/reminders', [ReminderController::class, 'getReminders']);
 Route::post('/medication', [ReminderController::class, 'storeMedication']);
 Route::post('/water', [ReminderController::class, 'storeWater']);
 Route::post('/dialysis', [ReminderController::class, 'storeDialysis']);
