@@ -18,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\IsAdmin::class,
             'patient' => \App\Http\Middleware\IsPatient::class,
             'doctor' => \App\Http\Middleware\IsDoctor::class,
+            'admin_or_doctor' => \App\Http\Middleware\AdminOrDoctorMiddleware::class,
+
         ]);
 
         // ✅ تأكد من إضافة Middleware الخاص بـ Laravel Sanctum

@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/doctors', [DoctorController::class, 'store'])->middleware('admin');
     Route::get('/all-doctors', [DoctorController::class, 'index'])->middleware('admin');
     Route::delete('/doctors/{id}', [DoctorController::class,'destroy'])->middleware('admin');
-    Route::put('/doctors/{id}', [DoctorController::class,'update'])->middleware('doctor');
+    Route::put('/doctors/{id}', [DoctorController::class,'update'])->middleware('admin_or_doctor');
 
     //api related patient
     Route::get('/all-patients', [PatientController::class, 'index'])->middleware('admin');
