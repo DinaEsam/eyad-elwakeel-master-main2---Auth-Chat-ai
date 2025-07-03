@@ -32,6 +32,7 @@ class ReminderController extends Controller
         ]);
 
         MedicationReminder::create([
+            'user_id' => Auth::id(),
             'medicine_name' => $request->medicine_name,
             'dose_count' => $request->dose_count,
             'period' => $request->period,
@@ -65,6 +66,7 @@ class ReminderController extends Controller
         ]);
 
         WaterReminder::create([
+            'user_id' => Auth::id(),
             'type' => $request->type,
             'wake_up_time' => $request->wake_up_time,
             'sleep_time' => $request->sleep_time,
@@ -96,6 +98,7 @@ class ReminderController extends Controller
         ]);
 
         DialysisReminder::create([
+            'user_id' => Auth::id(),
             'sessions_per_week' => $request->sessions_per_week,
             'start_date' => $request->start_date,
             'session_time' => $request->session_time,
