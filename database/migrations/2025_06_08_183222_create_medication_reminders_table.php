@@ -12,12 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('medication_reminders', function (Blueprint $table) {
-        $table->id();
-        $table->string('medicine_name');
+            $table->id();
+          $table->unsignedBigInteger('user_id');     
+          $table->string('medicine_name');
         $table->integer('dose_count');
         $table->string('period');
         $table->time('time');
         $table->timestamps();
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
          });
     }
 
