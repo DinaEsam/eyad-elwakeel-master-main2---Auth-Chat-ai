@@ -13,11 +13,13 @@ return new class extends Migration
     {
          Schema::create('water_reminders', function (Blueprint $table) {
         $table->id();
+        $table->unsignedBigInteger('user_id');
         $table->string('type');
         $table->string('wake_up_time');
         $table->string('sleep_time');
         $table->string('reminder_every');
         $table->timestamps();
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
     });
     }
 
