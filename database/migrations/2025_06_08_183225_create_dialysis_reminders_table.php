@@ -13,11 +13,12 @@ return new class extends Migration
     {
       Schema::create('dialysis_reminders', function (Blueprint $table) {
         $table->id();
+        $table->unsignedBigInteger('user_id');
         $table->integer('sessions_per_week');
         $table->date('start_date');
         $table->string('session_time');
         $table->timestamps();
-        
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
     });
     }
 
