@@ -10,6 +10,7 @@ class WaterReminder extends Model
    use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'type',
         'wake_up_time',
         'sleep_time',
