@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/doctors', [DoctorController::class, 'store'])->middleware('admin');
     Route::get('/all-doctors', [DoctorController::class, 'index'])->middleware('admin');
     Route::delete('/doctors/{id}', [DoctorController::class, 'destroy'])->middleware('admin');
-    Route::put('/doctors/{id}', [DoctorController::class, 'update'])->middleware('doctor');
+    Route::put('/doctors/{id}', [DoctorController::class, 'update'])->middleware('admin');
 
     //api related patient
     Route::get('/all-patients', [PatientController::class, 'index'])->middleware('admin');
@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/comments/{id}', [CommentsController::class, 'destroy'])->middleware('admin');
 });
 #ai
-Route::middleware('auth:sanctum')->post('/send-image', [FastApiController::class, 'sendImage']);
+Route::post('/send-image', [FastApiController::class, 'sendImage']);
 //api related Complaints and suggestions
 Route::post('/comments', [CommentsController::class, 'store']);
 // Notifications
