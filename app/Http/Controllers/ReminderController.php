@@ -103,4 +103,20 @@ class ReminderController extends Controller
 
         return response()->json(['message' => 'تم حفظ تذكير الغسيل بنجاح']);
     }
+    public function getReminders()
+    {
+        if (!Auth::guard('sanctum')->check()) {
+            return response()->json(['message' => 'يجب تسجيل الدخول أولاً'], 401);
+        }
+        $user = Auth::guard('sanctum')->user(); 
+        $medications = MedicationReminder::where('user_id', $user->id)->get();
+        $waters = WaterReminder::where('user_id', $user->id)->get();
+        $dialysis = DialysisReminder::where('user_id', $user->id)->get();
+
+        return response()->json([
+            'medications' => $medications,
+            'waters' => $waters,
+            'dialysis' => $dialysis,
+        ]);
+    }
 }
