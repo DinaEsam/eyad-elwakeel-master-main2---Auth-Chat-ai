@@ -49,16 +49,16 @@ Route::put('/doctors/{id}', [DoctorController::class, 'update'])->middleware('ad
     Route::get('/comments', [CommentsController::class, 'index'])->middleware('admin');
     Route::get('/comments/{id}', [CommentsController::class, 'show'])->middleware('admin');
     Route::delete('/comments/{id}', [CommentsController::class, 'destroy'])->middleware('admin');
+    // Notifications
+    Route::get('/reminders', [ReminderController::class, 'getReminders']);
+    Route::post('/medication', [ReminderController::class, 'storeMedication']);
+    Route::post('/water', [ReminderController::class, 'storeWater']);
+    Route::post('/dialysis', [ReminderController::class, 'storeDialysis']);
 });
 #ai
 Route::post('/send-image', [FastApiController::class, 'sendImage']);
 //api related Complaints and suggestions
 Route::post('/comments', [CommentsController::class, 'store']);
-// Notifications
-Route::get('/reminders', [ReminderController::class, 'getReminders']);
-Route::post('/medication', [ReminderController::class, 'storeMedication']);
-Route::post('/water', [ReminderController::class, 'storeWater']);
-Route::post('/dialysis', [ReminderController::class, 'storeDialysis']);
 
 //appointments
     Route::get('/appointments/available/{doctor_id}', [AppointmentController::class, 'availableAppointments']);
