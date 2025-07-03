@@ -10,7 +10,7 @@ class MedicationReminder extends Model
   use HasFactory;
 
     protected $fillable = [
-      
+        'user_id',
         'medicine_name',
         'dose_count',
         'period',
