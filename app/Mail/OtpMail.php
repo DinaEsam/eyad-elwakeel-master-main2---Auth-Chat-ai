@@ -11,7 +11,8 @@ use Illuminate\Queue\SerializesModels;
 
 class OtpMail extends Mailable
 {
-    use Queueable, SerializesModels;
+   use Queueable, SerializesModels;
+
     public $code;
 
     public function __construct($code)
@@ -19,12 +20,13 @@ class OtpMail extends Mailable
         $this->code = $code;
     }
 
-   public function build()
-{
-    return $this->view('emails.otp') // ← اسم ملف الـ HTML اللي فوق
-                ->subject('رمز التحقق من هويتك')
-                ->with(['code' => $this->code]); // ← نمرر المتغير للـ View
-}
+    public function build()
+    {
+        return $this->view('emails.otp') // ← اسم ملف الـ Blade
+                    ->subject('رمز التحقق من هويتك') // ← عنوان الإيميل
+                    ->with(['code' => $this->code]); // ← تمرير الكود للـ View
+    }
+
 
     /**
      * Get the message envelope.
