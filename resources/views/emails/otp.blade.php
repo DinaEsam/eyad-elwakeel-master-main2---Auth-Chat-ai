@@ -1,10 +1,13 @@
 @component('mail::message')
-# Reset Password OTP
+# التحقق من هويتك
 
 @component('mail::panel')
-Your OTP code is: **{{ $code }}**
+رمز التحقق الخاص بك هو:  
+**{{ $code }}**
 @endcomponent
 
-Thanks,  
+من فضلك لا تشارك هذا الرمز مع أي شخص.
+
+شكرًا لك،  
 {{ config('app.name') }}
 @endcomponent
