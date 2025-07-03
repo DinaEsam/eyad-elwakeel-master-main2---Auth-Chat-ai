@@ -19,10 +19,13 @@ class OtpMail extends Mailable
         $this->code = $code;
     }
 
-    public function build()
-    {
-        return $this->markdown('emails.otp')->with(['code' => $this->code]);
-    }
+   public function build()
+{
+    return $this->view('emails.otp') // ← اسم ملف الـ HTML اللي فوق
+                ->subject('رمز التحقق من هويتك')
+                ->with(['code' => $this->code]); // ← نمرر المتغير للـ View
+}
+
     /**
      * Get the message envelope.
      */
@@ -39,7 +42,7 @@ class OtpMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.otp',
         );
     }
 
