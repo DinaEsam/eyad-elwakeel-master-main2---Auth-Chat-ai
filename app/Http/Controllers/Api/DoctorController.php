@@ -99,6 +99,8 @@ class DoctorController extends Controller
         // تحديث كلمة المرور إذا تم إرسالها
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
+        } else {
+            unset($data['password']); 
         }
 
         // تحديث بيانات الدكتور

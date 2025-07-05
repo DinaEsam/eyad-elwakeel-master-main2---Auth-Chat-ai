@@ -7,13 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Doctor extends Model
 {
-    protected $fillable = [
-        'name',
-        'specialty',
-        'email',
-        'phone',
-        'user_id'
-    ];
+    protected $fillable = ['name', 'email', 'phone', 'password', 'specialization', 'experience', 'address'];
+
 
     public function user(): BelongsTo
     {
