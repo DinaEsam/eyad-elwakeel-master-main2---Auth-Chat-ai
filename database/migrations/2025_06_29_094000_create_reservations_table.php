@@ -11,18 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->string('f_name')->nullable();
-            $table->string('l_name')->nullable();
-            $table->string('email')->nullable();
-            $table->longText('massage');
-
-
+            $table->unsignedBigInteger('appointment_id');
+            $table->string('patient_name');
+            $table->string('phone_number');
             $table->timestamps();
+           $table->foreign('appointment_id')->references('id')->on('appointments')->onDelete('cascade');
 
-            // foirgn key
-            
         });
     }
 
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('reservations');
     }
 };
