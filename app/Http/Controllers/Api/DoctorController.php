@@ -88,7 +88,7 @@ class DoctorController extends Controller
         // التحقق من صحة البيانات المدخلة
         $data = $request->validate([
             'name' => 'string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,',
+            'email' => 'required|string|email|max:255',
             'phone' => 'string|max:20',
             'password' => 'nullable|min:6',
             'specialization' => 'string|max:255',

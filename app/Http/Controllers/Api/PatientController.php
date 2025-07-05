@@ -47,7 +47,7 @@ class PatientController extends Controller
         // التحقق من صحة البيانات
         $request->validate([
             'name' => 'sometimes|string|max:255',
-            'email' => 'required|string|email|max:255|',
+            'email' => 'required|string|email|max:255',
             'phone' => 'sometimes|string|max:20',
             'password' => 'sometimes|min:6',
             'national_id' => 'sometimes|string|max:20',
