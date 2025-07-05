@@ -111,7 +111,7 @@ class ReminderController extends Controller
         if (!Auth::guard('sanctum')->check()) {
             return response()->json(['message' => 'يجب تسجيل الدخول أولاً'], 401);
         }
-        $user = Auth::guard('sanctum')->user(); 
+        $user = Auth::guard('sanctum')->user();
         $medications = MedicationReminder::where('user_id', $user->id)->get();
         $waters = WaterReminder::where('user_id', $user->id)->get();
         $dialysis = DialysisReminder::where('user_id', $user->id)->get();
@@ -121,5 +121,57 @@ class ReminderController extends Controller
             'waters' => $waters,
             'dialysis' => $dialysis,
         ]);
+    }
+    ##########
+    public function deleteMedication($id)
+    {
+          if (!Auth::guard('sanctum')->check()) {
+            return response()->json(['message' => 'يجب تسجيل الدخول أولاً'], 401);
+        }
+
+
+        $reminder = MedicationReminder::where('user_id', Auth::id())->find($id);
+
+        
+        if (!$reminder) {
+            return response()->json(['message' => 'تذكير الدواء غير موجود'], 404);
+        }
+        $reminder->delete();
+
+        return response()->json(['message' => 'تم حذف تذكير الدواء بنجاح']);
+    }
+    ##########
+    public function deleteWater($id)
+    {
+        if (!Auth::guard('sanctum')->check()) {
+            return response()->json(['message' => 'يجب تسجيل الدخول أولاً'], 401);
+        }
+
+        $reminder = WaterReminder::where('user_id', Auth::id())->find($id);
+
+        if (!$reminder) {
+            return response()->json(['message' => 'تذكير المياه غير موجود'], 404);
+        }
+
+        $reminder->delete();
+
+        return response()->json(['message' => 'تم حذف تذكير المياه بنجاح']);
+    }
+    ##########
+    public function deleteDialysis($id)
+    {
+        if (!Auth::guard('sanctum')->check()) {
+            return response()->json(['message' => 'يجب تسجيل الدخول أولاً'], 401);
+        }
+
+        $reminder = DialysisReminder::where('user_id', Auth::id())->find($id);
+
+        if (!$reminder) {
+            return response()->json(['message' => 'تذكير الغسيل غير موجود'], 404);
+        }
+
+        $reminder->delete();
+
+        return response()->json(['message' => 'تم حذف تذكير الغسيل بنجاح']);
     }
 }
