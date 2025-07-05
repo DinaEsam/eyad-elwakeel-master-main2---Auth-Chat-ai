@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/doctors', [DoctorController::class, 'store'])->middleware('admin');
     Route::get('/all-doctors', [DoctorController::class, 'index'])->middleware('admin');
     Route::delete('/doctors/{id}', [DoctorController::class, 'destroy'])->middleware('admin');
-Route::put('/doctors/{id}', [DoctorController::class, 'update'])->middleware('admin_or_doctor');
+    Route::put('/doctors/{id}', [DoctorController::class, 'update'])->middleware('admin_or_doctor');
 
     //api related patient
     Route::get('/all-patients', [PatientController::class, 'index'])->middleware('admin');
@@ -54,6 +54,9 @@ Route::put('/doctors/{id}', [DoctorController::class, 'update'])->middleware('ad
     Route::post('/medication', [ReminderController::class, 'storeMedication']);
     Route::post('/water', [ReminderController::class, 'storeWater']);
     Route::post('/dialysis', [ReminderController::class, 'storeDialysis']);
+    Route::delete('/medication/delete/{id}', [ReminderController::class, 'deleteMedication']);
+    Route::delete('/water/delete/{id}', [ReminderController::class, 'deleteWater']);
+    Route::delete('/dialysis/delete/{id}', [ReminderController::class, 'deleteDialysis']);
 });
 #ai
 Route::post('/send-image', [FastApiController::class, 'sendImage']);
@@ -61,8 +64,8 @@ Route::post('/send-image', [FastApiController::class, 'sendImage']);
 Route::post('/comments', [CommentsController::class, 'store']);
 
 //appointments
-    Route::get('/appointments/available/{doctor_id}', [AppointmentController::class, 'availableAppointments']);
-    Route::post('/appointments/reserve/{appointment_id}', [AppointmentController::class, 'reserve']);
+Route::get('/appointments/available/{doctor_id}', [AppointmentController::class, 'availableAppointments']);
+Route::post('/appointments/reserve/{appointment_id}', [AppointmentController::class, 'reserve']);
 //email
 Route::post('/forgot-password', [ResetPasswordController::class, 'sendResetCode']);
 Route::post('/verify-reset-code', [ResetPasswordController::class, 'verifyResetCode']);
